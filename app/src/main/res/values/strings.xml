@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Screencast</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="snackbar_recording_finished">Recording finished</string>
+    <string name="snackbar_cannot_initiate_video">Cannot initiate video!</string>
+
+</resources>

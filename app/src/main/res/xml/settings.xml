@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="General Settings">
+
+        <ListPreference
+            android:title="Recording start delay"
+            android:entryValues="@array/prefs_recording_start_delay"
+            android:key="recording_start_delay"/>
+
+        <CheckBoxPreference
+            android:title="Show recording notification"
+            android:key="show_recording_notification" />
+
+        <EditTextPreference
+            android:title="Storage location"
+            android:key="storage_location" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Video Settings">
+
+        <CheckBoxPreference
+            android:title="Microphone audio recording"
+            android:key="microphone_audio_recording" />
+
+        <ListPreference
+            android:title="Video Bitrate"
+            android:entryValues="@array/video_bitrate"
+            android:key="video_bitrate" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
