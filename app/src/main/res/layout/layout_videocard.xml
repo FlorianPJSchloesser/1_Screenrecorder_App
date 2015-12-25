@@ -3,8 +3,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="8dp"
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_marginRight="16dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginRight="8dp"
                                     android:layout_marginTop="8dp">
 
     <LinearLayout
@@ -16,8 +16,6 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
         android:orientation="horizontal">
 
 
@@ -61,7 +59,15 @@
                 android:layout_marginStart="8dp"
                 android:text="Length: 14:05"/>
 
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="4dp"/>
 
+            <TextView
+                android:id="@+id/videocard_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"/>
 
         </LinearLayout>
 
@@ -79,14 +85,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="8dp"
-            android:text="SHARE"/>
+            android:text="@string/action_share"/>
 
         <Button
             android:id="@+id/btn_play"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PLAY"
+            android:text="@string/action_play"
             android:paddingEnd="8dp"/>
 
         <Button
@@ -94,7 +100,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DELETE"
+            android:text="@string/action_delete"
             android:paddingEnd="8dp"/>
 
     </LinearLayout>

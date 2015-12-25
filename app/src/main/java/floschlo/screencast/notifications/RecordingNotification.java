@@ -25,27 +25,29 @@ public class RecordingNotification {
 
         Intent stopIntent = new Intent(context, MainActivity.class);
         stopIntent.setAction(MainActivity.ACTION_REC_STOP);
-        discardIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        stopIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 
-        PendingIntent discardPendingIntent = PendingIntent.getActivity(context, 1, discardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent stoptPendingIntent = PendingIntent.getActivity(context, 1, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent discardPendingIntent = PendingIntent.getActivity(context, 1, discardIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent stopPendingIntent = PendingIntent.getActivity(context, 1, stopIntent, PendingIntent.FLAG_ONE_SHOT);
 
         Notification notification = new Notification.Builder(context)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setCategory(Notification.CATEGORY_PROGRESS)
+                .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Screencast")
                 .setOngoing(true)
+                .setUsesChronometer(true)
                 .setContentText("Floschlo screencast is recording")
                 .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_stat_recording)
-                .addAction(R.drawable.ic_not_discard, "Discard", discardPendingIntent)
-                .addAction(R.drawable.ic_not_stop, "Stop", stoptPendingIntent).build();
+                .addAction(R.drawable.ic_action_discard, "Discard", discardPendingIntent)
+                .addAction(R.drawable.ic_action_stop, "Stop", stopPendingIntent).build();
 
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
+        notificationManager.notify(ID, notification);
     }
 
     public static void cancel (Context context) {

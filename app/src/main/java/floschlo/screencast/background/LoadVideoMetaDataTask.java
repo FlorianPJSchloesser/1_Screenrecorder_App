@@ -1,52 +1,67 @@
 package floschlo.screencast.background;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import floschlo.screencast.container.VideoDataContainer;
 
 /**
  * Created by Florian on 20.12.2015.
  */
-public class LoadVideoMetaDataTask extends AsyncTask<Void, Void, MediaMetadataRetriever> {
+public class LoadVideoMetaDataTask extends AsyncTask<File, Void, ArrayList<VideoDataContainer>> {
 
     public final static String TAG = LoadVideoMetaDataTask.class.getSimpleName();
 
-    private File mVideoFile;
     private OnMetaDataLoadedListener mListener;
 
-    public LoadVideoMetaDataTask(File videoFile, OnMetaDataLoadedListener listener) {
-        mVideoFile = videoFile;
+    public LoadVideoMetaDataTask(OnMetaDataLoadedListener listener) {
         mListener = listener;
     }
 
     @Override
-    protected MediaMetadataRetriever doInBackground(Void... params) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(mVideoFile.getPath());
-        return retriever;
+    protected ArrayList<VideoDataContainer> doInBackground(File... files) {
+
+        ArrayList<VideoDataContainer> data = new ArrayList<>();
+
+        for (File file : files) {
+
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(file.getPath());
+            VideoDataContainer dataContainer = new VideoDataContainer(
+                    file.getName(),
+                    convertVideoLength(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)),
+                    convertVideoDate(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE)),
+                    file.getPath(),
+                    convertFileSize(file.length())
+
+
+            );
+            data.add(dataContainer);
+        }
+
+        return data;
+    }
+
+    private String convertFileSize(long length) {
+
+        float mb = length / 1048576;
+
+        return mb + "MB";
+
     }
 
     @Override
-    protected void onPostExecute(MediaMetadataRetriever retriever) {
-        Bitmap videoThumbnail = null;
-        String videoTitle = "";// TODO: 20.12.2015 Find way to get video title
-        String videoDate = "";
-        String videoLength = "";
-
-        videoThumbnail = retriever.getFrameAtTime();// TODO: 20.12.2015 Performance issue (perhaps this method belongs in doInBackground?)
-        videoLength = convertVideoLength(Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)));
-        videoDate = convertVideoDate(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE));
-
-        retriever.release();
-
-        mListener.onVideoThumbnailLoaded(videoThumbnail, videoTitle, videoDate, videoLength);
-
+    protected void onPostExecute(ArrayList<VideoDataContainer> dataContainers) {
+        mListener.onVideoMetaDataLoaded(dataContainers);
     }
 
     private String convertVideoDate(String rawDate) {
@@ -63,7 +78,8 @@ public class LoadVideoMetaDataTask extends AsyncTask<Void, Void, MediaMetadataRe
         return calendarDate + " (" + timeDate + ")";
     }
 
-    private String convertVideoLength(int millis) {
+    private String convertVideoLength(String strMillis) {
+        int millis = Integer.parseInt(strMillis);
         return String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(millis),
                 TimeUnit.MILLISECONDS.toMinutes(millis) -
@@ -74,7 +90,7 @@ public class LoadVideoMetaDataTask extends AsyncTask<Void, Void, MediaMetadataRe
 
     public interface OnMetaDataLoadedListener {
 
-        void onVideoThumbnailLoaded(Bitmap videoThumbnail, String videoTitle, String videoDate, String videoLength);
+        void onVideoMetaDataLoaded(ArrayList<VideoDataContainer> dataList);
 
     }
 }
