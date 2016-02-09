@@ -5,18 +5,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.support.v7.view.menu.MenuItemImpl;
-import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -24,7 +20,7 @@ import floschlo.screencast.BuildConfig;
 import floschlo.screencast.R;
 
 /**
- * Created by Florian on 03.02.2016.
+ * Widget displaying a panel where the user can configure the recording.
  */
 public class ConfigurationView extends RelativeLayout implements View.OnClickListener{
 
@@ -49,11 +45,6 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
     private int mRevealX;
     private int mRevealY;
 
-    public interface ConfigurationActionReceiver {
-        void onCancelled();
-        void onApplied();
-    }
-
     public ConfigurationView(Context context) {
         super(context);
         init();
@@ -70,6 +61,7 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
     }
 
     @TargetApi(23)
+    @SuppressWarnings("unused")
     public ConfigurationView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
@@ -174,7 +166,6 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
         for (int i = 0; i < mBitrateValues.length; i++) {
             if (mBitrateValues[i] == storedBitrate)
                 mBitrateSpinner.setSelection(i, true);
-            Log.w(TAG, "restoreConfiguration: lksjhgriuehrgoiejrogiejhrogi ");
         }
         for (int i = 0; i < mEncoderValues.length; i++) {
             if (mEncoderValues[i] == storedEncoder)
@@ -185,7 +176,7 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
                 mOutputFormatSpinner.setSelection(i, true);
         }
 
-        mFpsEditText.setText("" + storedFps);
+        mFpsEditText.setText(storedFps);
     }
 
     /**
@@ -205,7 +196,7 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
     /**
      * Loads preferences values from resources.
      *
-     * @param resources
+     * @param resources Resources object
      */
     private void loadValues(Resources resources) {
         mBitrateValues = resources.getIntArray(R.array.prefs_video_bitrate);
@@ -217,10 +208,6 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
             Log.d(TAG, "loadValues: mEncoderValues.length==" + mEncoderValues.length);
             Log.d(TAG, "loadValues: mOutputFormatValues.length==" + mOutputFormatValues.length);
         }
-    }
-
-    public void show () {
-        show(null);
     }
 
     public void show(View revealSource) {
