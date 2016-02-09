@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.File;
 import java.lang.reflect.Array;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import floschlo.screencast.BuildConfig;
 import floschlo.screencast.container.VideoDataContainer;
 
 /**
@@ -34,26 +36,37 @@ public class LoadVideoMetaDataTask extends AsyncTask<File, Void, ArrayList<Video
 
         for (File file : files) {
 
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(file.getPath());
-            VideoDataContainer dataContainer = new VideoDataContainer(
-                    file.getName(),
-                    convertVideoLength(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)),
-                    convertVideoDate(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE)),
-                    file.getPath(),
-                    convertFileSize(file.length())
+            if (isCancelled()) {
+                return data;
+            }
+
+            if (file.exists() && file.isFile()) {
+
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.setDataSource(file.getPath());
+                VideoDataContainer dataContainer = new VideoDataContainer(
+                        file.getName(),
+                        convertVideoLength(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)),
+                        convertVideoDate(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE)),
+                        file.getPath(),
+                        convertFileSize(file.length())
 
 
-            );
-            data.add(dataContainer);
+                );
+                data.add(dataContainer);
+                if (BuildConfig.DEBUG)
+                    Log.i(TAG, "doInBackground: Data added");
+            }
         }
 
         return data;
     }
 
+
+
     private String convertFileSize(long length) {
 
-        float mb = length / 1048576;
+        double mb = length / 1048576;
 
         return mb + "MB";
 

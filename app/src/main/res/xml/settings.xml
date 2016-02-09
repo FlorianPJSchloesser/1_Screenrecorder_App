@@ -1,36 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="General Settings">
+    <PreferenceCategory android:title="@string/prefs_category_notification_control">
+        <CheckBoxPreference
+            android:title="@string/prefs_title_notificationcontrol_activate_notification_control"
+            android:summary="@string/prefs_summary_notificationcontrol_activate_notification_control"
+            android:key="notification_control_activate" />
+        <PreferenceScreen
+            android:title="@string/prefs_title_notificationcontrol_customize_notification_control" >
 
+            <CheckBoxPreference
+                android:title="No implementation for now"
+                android:key="s"/>
+
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefs_category_recording">
         <ListPreference
-            android:title="Recording start delay"
+            android:title="@string/prefs_title_recording_start_delay"
+            android:entries="@array/prefs_entries_recording_start_delay"
             android:entryValues="@array/prefs_recording_start_delay"
             android:key="recording_start_delay"/>
-
         <CheckBoxPreference
-            android:title="Show recording notification"
-            android:key="show_recording_notification" />
-
-        <EditTextPreference
-            android:title="Storage location"
-            android:key="storage_location" />
-
+            android:title="@string/prefs_title_recording_show_record_notification_icon"
+            android:key="recording_notification_icon" />
     </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="Video Settings">
-
-        <CheckBoxPreference
-            android:title="Microphone audio recording"
-            android:key="microphone_audio_recording" />
-
+    <PreferenceCategory android:title="@string/prefs_category_video">
         <ListPreference
-            android:title="Video Bitrate"
-            android:entryValues="@array/video_bitrate"
+            android:title="@string/prefs_title_video_bitrate"
+            android:entryValues="@array/prefs_video_bitrate"
+            android:entries="@array/prefs_entries_video_bitrate"
+            android:dialogTitle="@string/prefs_title_dialog_bitrate"
+            android:dialogMessage="@string/prefs_message_dialog_bitrate"
             android:key="video_bitrate" />
-
+        <ListPreference
+            android:title="@string/prefs_title_video_encoder"
+            android:entryValues="@array/prefs_video_encoder"
+            android:entries="@array/prefs_entries_video_encoder"
+            android:dialogTitle="@string/prefs_title_dialog_encoder"
+            android:dialogMessage="@string/prefs_message_dialog_encoder"
+            android:key="video_encoder" />
+        <EditTextPreference
+            android:title="@string/prefs_title_video_framerate"
+            android:inputType="numberDecimal"
+            android:maxLength="2"
+            android:dialogTitle="@string/prefs_title_dialog_framerate"
+            android:key="video_framerate" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefs_category_advanced">
+        <EditTextPreference
+            android:title="@string/prefs_title_advanced_storage_location"
+            android:key="advanced_storage" />
     </PreferenceCategory>
 
 </PreferenceScreen>

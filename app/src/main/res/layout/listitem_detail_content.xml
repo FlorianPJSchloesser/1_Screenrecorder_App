@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="72dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+    <floschlo.screencast.view.RectLayout
+        android:layout_width="72dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_audiotrack_light"/>
+    </floschlo.screencast.view.RectLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/listitem_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Length: "
+            style="@style/TextAppearance.AppCompat.SearchResult.Title"/>
+
+        <TextView
+            android:id="@+id/listitem_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XYZ"
+            style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:id="@+id/storage_root">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_must_enable_external_storage_access"
+        android:gravity="center"/>
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:id="@+id/storage_button_grant_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/button_grant_permission"/>
+
+</LinearLayout>

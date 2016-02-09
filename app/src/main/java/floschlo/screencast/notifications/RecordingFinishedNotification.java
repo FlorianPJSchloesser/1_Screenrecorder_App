@@ -8,15 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 
 import java.io.File;
 import java.util.List;
 
-import floschlo.screencast.BuildConfig;
 import floschlo.screencast.R;
-import floschlo.screencast.activity.MainActivity;
 
 /**
  * Created by Florian on 21.12.2015.
@@ -49,12 +45,12 @@ public class RecordingFinishedNotification {
         Notification notification = new Notification.Builder(context)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setContentTitle("Record finished")
-                .setContentText("Video file saved")
+                .setContentTitle(context.getResources().getString(R.string.notification_finished_title))
+                .setContentText(context.getResources().getString(R.string.notification_finished_content))
                 .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_stat_recordfinished)
-                .addAction(R.drawable.ic_action_share, "Share", sharePendingIntent)
-                .addAction(R.drawable.ic_action_play, "Play", playPendingIntent).build();
+                        .addAction(R.drawable.ic_not_share, context.getResources().getString(R.string.action_share), sharePendingIntent)
+                                .addAction(R.drawable.ic_not_play, context.getResources().getString(R.string.action_play), playPendingIntent).build();
 
 
         NotificationManager notificationManager =

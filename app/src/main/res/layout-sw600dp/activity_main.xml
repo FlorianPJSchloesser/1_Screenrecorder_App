@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:elevation="0dp" />
+
+    <include
+        layout="@layout/include_no_storage_permission"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="128dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="100dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginRight="112dp"
+        android:paddingBottom="112dp"
+        android:clipToPadding="false"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/record_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_fab_record"
+        android:tint="@color/colorPrimary"
+        app:backgroundTint="@android:color/white"
+        android:elevation="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:layout_anchor="@+id/toolbar"
+        app:layout_anchorGravity="bottom|right"/>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

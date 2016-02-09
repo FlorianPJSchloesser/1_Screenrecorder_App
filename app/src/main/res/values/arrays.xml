@@ -10,12 +10,59 @@
         <item>15</item>
     </integer-array>
 
-    <integer-array name="video_bitrate">
+    <string-array name="prefs_entries_recording_start_delay">
+        <item>1 Second</item>
+        <item>2 Seconds</item>
+        <item>3 Seconds</item>
+        <item>5 Seconds</item>
+        <item>10 Seconds</item>
+        <item>15 Seconds</item>
+    </string-array>
+
+    <integer-array name="prefs_video_bitrate">
         <item>10</item>
         <item>8</item>
         <item>6</item>
         <item>4</item>
         <item>2</item>
+        <item>1</item>
+    </integer-array>
+
+    <string-array name="prefs_entries_video_bitrate">
+        <item>10 Mbit/s</item>
+        <item>8 Mbit/s</item>
+        <item>6 Mbit/s</item>
+        <item>4 Mbit/s</item>
+        <item>2 Mbit/s</item>
+        <item>1 Mbit/s</item>
+    </string-array>
+
+    <integer-array name="prefs_video_encoder">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string-array name="prefs_entries_video_encoder">
+        <item>Default</item>
+        <item>H263</item>
+        <item>H264</item>
+        <item>MPEG 4 SP</item>
+        <item>VP8</item>
+    </string-array>
+
+    <string-array name="prefs_entries_output_format">
+        <item>Default (MP4)</item>
+        <item>MP4</item>
+        <item>3GPP</item>
+    </string-array>
+
+    <integer-array name="prefs_output_format">
+        <item>-1</item>
+        <item>2</item>
+        <item>1</item>
     </integer-array>
 
 </resources>

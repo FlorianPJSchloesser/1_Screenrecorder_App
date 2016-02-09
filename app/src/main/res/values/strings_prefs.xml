@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefs_category_notification_control">General settings</string>
+    <string name="prefs_category_recording">Recording behaviour</string>
+    <string name="prefs_category_video">Video settings</string>
+    <string name="prefs_category_advanced">Advanced options</string>
+
+    <string name="prefs_title_notificationcontrol_activate_notification_control">Activate notification control</string>
+    <string name="prefs_title_notificationcontrol_customize_notification_control">Customize notification control</string>
+    <string name="prefs_title_recording_start_delay">Recording start delay</string>
+    <string name="prefs_title_recording_show_record_notification_icon">Show record notification icon</string>
+    <string name="prefs_title_video_bitrate">Bitrate</string>
+    <string name="prefs_title_video_encoder">Video encoder</string>
+    <string name="prefs_title_video_framerate">Framerate (FPS)</string>
+    <string name="prefs_title_advanced_storage_location">Advanced Storage Location</string>
+
+    <string name="prefs_title_dialog_bitrate">Choose bitrate</string>
+    <string name="prefs_title_dialog_encoder">Choose encoder</string>
+    <string name="prefs_title_dialog_framerate">Enter desired frame rate</string>
+
+    <string name="prefs_message_dialog_bitrate">In case your device cannot handle selected bitrate it might be scaled down!</string>
+    <string name="prefs_message_dialog_encoder">Your device might not support some encoders.</string>
+
+    <string name="prefs_summary_notificationcontrol_activate_notification_control">Shows a persistent notification giving you the opportunity to start recording</string>
+</resources>

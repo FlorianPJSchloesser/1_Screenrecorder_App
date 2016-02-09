@@ -18,7 +18,7 @@ public class RecordingNotification {
 
     public final static int ID = 1;
 
-    public final static void createNotification (Context context) {
+    public final static void createNotification(Context context) {
         Intent discardIntent = new Intent(context, MainActivity.class);
         discardIntent.setAction(MainActivity.ACTION_REC_DISCARD);
         discardIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -35,14 +35,14 @@ public class RecordingNotification {
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setCategory(Notification.CATEGORY_PROGRESS)
                 .setPriority(Notification.PRIORITY_MAX)
-                .setContentTitle("Screencast")
+                .setContentTitle(context.getResources().getString(R.string.notification_recording_title))
                 .setOngoing(true)
                 .setUsesChronometer(true)
-                .setContentText("Floschlo screencast is recording")
+                .setContentText(context.getResources().getString(R.string.notification_recording_content))
                 .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_stat_recording)
-                .addAction(R.drawable.ic_action_discard, "Discard", discardPendingIntent)
-                .addAction(R.drawable.ic_action_stop, "Stop", stopPendingIntent).build();
+                .addAction(R.drawable.ic_not_discard, context.getResources().getString(R.string.action_discard), discardPendingIntent)
+                .addAction(R.drawable.ic_not_stop, context.getResources().getString(R.string.action_stop), stopPendingIntent).build();
 
 
         NotificationManager notificationManager =
@@ -50,7 +50,7 @@ public class RecordingNotification {
         notificationManager.notify(ID, notification);
     }
 
-    public static void cancel (Context context) {
+    public static void cancel(Context context) {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(ID);

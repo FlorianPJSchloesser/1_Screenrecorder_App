@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="footer_video_count">
+        <item quantity="zero">No videos</item>
+        <item quantity="one">One video total</item>
+        <item quantity="two">Two videos total</item>
+        <item quantity="other">%s videos total</item>
+    </plurals>
+</resources>
