@@ -605,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Shows a snack bar with given string as message and LENGTH_SHORT.
      *
-     * @param stringResourceId The id of string ressource.
+     * @param stringResourceId The id of string resource.
      */
     private void showSnackbar(int stringResourceId) {
         Snackbar.make(mRootView, getResources().getString(stringResourceId), Snackbar.LENGTH_SHORT).show();
