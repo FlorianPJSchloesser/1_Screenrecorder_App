@@ -1,6 +1,6 @@
 package floschlo.screencast.activity;
 
-import android.animation.Animator;
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -17,13 +16,14 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,19 +36,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.Manifest;
-import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import floschlo.screencast.BuildConfig;
 import floschlo.screencast.R;
@@ -61,6 +56,9 @@ import floschlo.screencast.notifications.RecordingNotification;
 import floschlo.screencast.utils.IntentUtils;
 import floschlo.screencast.view.ConfigurationView;
 
+/**
+ * Application's main activity class.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public final static String TAG = MainActivity.class.getSimpleName();
@@ -104,33 +102,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //Prepare activity basics
         setContentView(R.layout.activity_main);
-        getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
+        setStatusBarColor();
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         //Initialize all views in this activity
         assignViews();
 
-        applyTransculentStatusMargins();
+        applyTranslucentStatusMargins();
 
         //Collect values needed for recording
         calculateDisplayMetrics();
 
-    }
-
-    private void applyTransculentStatusMargins() {
-        findViewById(R.id.statusbar_scrim).setMinimumHeight(getStatusBarHeight());
-        findViewById(R.id.statusbar_scrim).invalidate();
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     @Override
@@ -142,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onNewIntent(final Intent intent) {
         Log.d(TAG, "onNewIntent: receiving new intent with action: " + intent.getAction());
-        if (intent.getAction() == ACTION_REC_STOP) {
+        if (intent.getAction().equals(ACTION_REC_STOP)) {
             Snackbar.make(mRootView, R.string.snackbar_recording_finished, Snackbar.LENGTH_LONG).setAction(R.string.action_play, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,13 +154,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         switch (requestCode) {
             case REQUEST_START_RECORDING:
                 boolean allowed = true;
                 for (int i = 0; i < permissions.length; i++) {
-                    if (permissions[i] == Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+                    if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                             if (BuildConfig.DEBUG)
                                 Log.w(TAG, "onRequestPermissionsResult: External storage permission denied!");
@@ -241,13 +226,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         if (v == mStartRecordFabView) {
-            if (mIsRecording) {
-
-            } else {
+            if (!mIsRecording) {
                 startScreenRecording();
             }
         } else if (v == mGrantStorageButtonView) {
             ActivityCompat.requestPermissions((Activity) getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_LIST_VIDEOS);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @SuppressWarnings("deprecation")
+    private void setStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent, getTheme()));
+        } else {
+            getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
         }
     }
 
@@ -393,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Stops screen recording
      *
-     * @param keep
+     * @param keep If false file will be deleted and not added to media server.
      */
     private void stopScreenRecording(boolean keep) {
         mIsRecording = false;
@@ -412,14 +405,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }).execute(mCurrentVideoFile);
         } else {
-            mCurrentVideoFile.delete();
+            if (!mCurrentVideoFile.delete()) {
+                if (BuildConfig.VERBOSE)
+                    Log.w(TAG, "stopScreenRecording: Cannot delet file!");
+            }
         }
     }
 
     /**
      * Removes video from list and deletes file if the "Undo" action hasn't been activated.
      *
-     * @param deleteIntent
+     * @param deleteIntent The intent which started the delete process.
      */
     private void deleteVideoFromList(Intent deleteIntent) {
 
@@ -440,7 +436,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDismissed(Snackbar snackbar, int event) {
                 super.onDismissed(snackbar, event);
                 if (event != DISMISS_EVENT_ACTION) {
-                    new File(videoDataContainer.getVideoPath()).delete();
+                    if (!new File(videoDataContainer.getVideoPath()).delete()) {
+                        if (BuildConfig.VERBOSE)
+                            Log.w(TAG, "onDismissed: File cannot be deleted!");
+                    }
                 }
             }
         }).show();
@@ -494,13 +493,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void prepareRecorder() {
         try {
             mMediaRecorder.prepare();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            finish();
-        } catch (IOException e) {
+        } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
             finish();
         }
+    }
+
+    private void applyTranslucentStatusMargins() {
+        findViewById(R.id.statusbar_scrim).setMinimumHeight(getStatusBarHeight());
+        findViewById(R.id.statusbar_scrim).invalidate();
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     /**
@@ -541,32 +551,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Generates file name and creates directory if not exist.
+     * Generates file name and creates parent directory if not exist.
      *
-     * @return File for saving video data
+     * @return File to store video data
      */
     private File generateNewVideoFile(int outputFormat) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "generateNewVideoFile: generating File");
         }
+
+        //First collect some data about how the file should be named.
         String extension = generateExtensionFromOutputFormat(outputFormat);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
         Date now = new Date();
+
+        //Create file name and path from previous collected information.
         String fileName = "Screencast_" + formatter.format(now) + extension;
         String pathName = Environment.getExternalStorageDirectory().getPath() + "/Movies/Screencasts/";
-        new File(pathName).mkdirs();
-        File file = new File(pathName + fileName);
-        if (!file.exists()) {
-            if (BuildConfig.DEBUG)
-                Log.w(TAG, "generateNewVideoFile: Cannot create video file!");
+
+        //Create file objects.
+        File videoParentDir = new File(pathName);
+        File videoFile = new File(pathName + fileName);
+
+        //Make everything ready.
+        if (!videoParentDir.exists()) {
+            if (!videoParentDir.mkdirs()) {
+                if (BuildConfig.VERBOSE)
+                    Log.e(TAG, "generateNewVideoFile: Cannot create video file!");
+            }
         }
-        return file;
+
+        //Return file object.
+        return videoFile;
     }
 
     private String generateExtensionFromOutputFormat(int outputFormat) {
-        /*
-        public static final int THREE_GPP = 1;
-        public static final int MPEG_4 = 2; */
         String[] outputArray = new String[]{".mp4", ".3gp", ".mp4"};
         return outputArray[outputFormat];
     }
@@ -592,11 +611,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Snackbar.make(mRootView, getResources().getString(stringResourceId), Snackbar.LENGTH_SHORT).show();
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     private boolean checkPermission(String permission) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            return checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
-        } else {
-            return true;
-        }
+        return Build.VERSION.SDK_INT < 23 || checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
     }
 }
