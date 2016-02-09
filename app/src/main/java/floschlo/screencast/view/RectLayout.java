@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import floschlo.screencast.R;
 
 /**
- * Created by Florian on 18.01.2016.
+ * Advanced RelativeLayout always having same height as width.
  */
 public class RectLayout extends RelativeLayout {
 
