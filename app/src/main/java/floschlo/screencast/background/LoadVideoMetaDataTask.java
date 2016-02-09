@@ -62,14 +62,23 @@ public class LoadVideoMetaDataTask extends AsyncTask<File, Void, ArrayList<Video
         return data;
     }
 
-
-
     private String convertFileSize(long length) {
+        if(length <= 1000000) {
+            return length/1000 + "KB";
+        } else if (length <= 1000000000) {
+            return length/1000000 + "MB";
+        } else if (length <= 1000000000000l) {
+            return length/1000000000 + "MB";
+        }
+        return "0b";
+        /*
+        if (length < 1048576) {
+            double mb = length / 1048576;
+            return mb + "MB";
+        } else {
 
-        double mb = length / 1048576;
-
-        return mb + "MB";
-
+        }
+        */
     }
 
     @Override
