@@ -1,10 +1,16 @@
 package floschlo.screencast.view;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,17 +18,20 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import floschlo.screencast.BuildConfig;
 import floschlo.screencast.R;
+import floschlo.screencast.activity.MainActivity;
 
 /**
  * Widget displaying a panel where the user can configure the recording.
  */
-public class ConfigurationView extends RelativeLayout implements View.OnClickListener{
+public class ConfigurationView extends RelativeLayout implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     public final static String TAG = ConfigurationView.class.getSimpleName();
 
@@ -34,6 +43,7 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
     private Spinner mEncoderSpinner;
     private Spinner mOutputFormatSpinner;
     private EditText mFpsEditText;
+    private Switch mMicrophoneSwitch;
     private View mSpacer;
 
     /* CONFIGURATION VALUES */
@@ -98,12 +108,14 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
         mEncoderSpinner = (Spinner) findViewById(R.id.encoder_spinner);
         mOutputFormatSpinner = (Spinner) findViewById(R.id.output_fromat_spinner);
         mFpsEditText = (EditText) findViewById(R.id.fps_edit);
+        mMicrophoneSwitch = (Switch) findViewById(R.id.switch_micro);
         mSpacer = findViewById(R.id.spacer);
     }
 
     private void applyListeners() {
         mApplyConfigurationButton.setOnClickListener(this);
         mCancelConfigurationButton.setOnClickListener(this);
+        mMicrophoneSwitch.setOnCheckedChangeListener(this);
         mSpacer.setOnClickListener(this);
     }
 
@@ -136,12 +148,14 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
         int encoder = mEncoderValues[mEncoderSpinner.getSelectedItemPosition()];
         int outputFormat = mOutputFormatValues[mOutputFormatSpinner.getSelectedItemPosition()];
         int fps = Integer.parseInt(mFpsEditText.getText().toString());
+        boolean audio = mMicrophoneSwitch.isChecked();
 
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "applyConfiguration: bitrate==" + bitrate);
             Log.d(TAG, "applyConfiguration: encoder==" + encoder);
             Log.d(TAG, "applyConfiguration: outputFormat==" + outputFormat);
             Log.d(TAG, "applyConfiguration: fps==" + fps);
+            Log.d(TAG, "applyConfiguration: audio==" + audio);
         }
 
         //Apply the selected configuration to preferences.
@@ -151,6 +165,7 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
                 .putInt("video_encoder", encoder)
                 .putInt("video_output_format", outputFormat)
                 .putInt("video_framerate", fps)
+                .putBoolean("video_audio", audio)
                 .apply();
     }
 
@@ -162,6 +177,7 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
         int storedEncoder = sharedPreferences.getInt("video_encoder", 0);
         int storedOutputFormat = sharedPreferences.getInt("video_output_format", -1);
         int storedFps = sharedPreferences.getInt("video_framerate", 30);
+        boolean storedAuio = sharedPreferences.getBoolean("video_audio", false);
 
         for (int i = 0; i < mBitrateValues.length; i++) {
             if (mBitrateValues[i] == storedBitrate)
@@ -176,7 +192,8 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
                 mOutputFormatSpinner.setSelection(i, true);
         }
 
-        mFpsEditText.setText(storedFps);
+        mMicrophoneSwitch.setChecked(storedAuio);
+        mFpsEditText.setText(String.valueOf(storedFps));
     }
 
     /**
@@ -276,5 +293,17 @@ public class ConfigurationView extends RelativeLayout implements View.OnClickLis
             });
             animator.start();
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked && buttonView.equals(mMicrophoneSwitch) && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.RECORD_AUDIO}, MainActivity.REQUEST_CONFIGURATION_PANEL);
+        }
+    }
+
+    public void audioPermissionGranted(boolean b) {
+        mMicrophoneSwitch.setChecked(b);
     }
 }

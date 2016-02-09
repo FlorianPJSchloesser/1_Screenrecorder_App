@@ -81,9 +81,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ConfigurationView mConfigurationPanel;
 
     /* REQUEST CODES */
-    private static final int REQUEST_ASK_SCREEN_CAPTURE_ACCESS = 1;
-    private static final int REQUEST_START_RECORDING = 2;
-    private static final int REQUEST_LIST_VIDEOS = 3;
+    public static final int REQUEST_ASK_SCREEN_CAPTURE_ACCESS = 1;
+    public static final int REQUEST_START_RECORDING = 2;
+    public static final int REQUEST_LIST_VIDEOS = 3;
+    public static final int REQUEST_CONFIGURATION_PANEL = 4;
 
     /* RECORD VALUES */
     private int mScreenDensity;
@@ -157,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         switch (requestCode) {
+            case REQUEST_CONFIGURATION_PANEL:
+                mConfigurationPanel.audioPermissionGranted(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                break;
             case REQUEST_START_RECORDING:
                 boolean allowed = true;
                 for (int i = 0; i < permissions.length; i++) {
@@ -337,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @TargetApi(23)
     private void startScreenRecording() {
 
-        if (!checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) || !checkPermission(Manifest.permission.RECORD_AUDIO)) {
+        if (!checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
             if (BuildConfig.DEBUG)
                 Log.w(TAG, "startScreenRecording: Cannot start screen recording yet. Asking for permissions...");
@@ -524,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Load video configuration
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isAudioEnabled = sharedPreferences.getBoolean("microphone_audio_recording", true) && checkPermission(Manifest.permission.RECORD_AUDIO);
+        boolean isAudioEnabled = sharedPreferences.getBoolean("video_audio", false) && checkPermission(Manifest.permission.RECORD_AUDIO);
         int bitrate = sharedPreferences.getInt("video_bitrate", 1);
         int videoEncoder = sharedPreferences.getInt("video_encoder", 2);
         int outputFormat = sharedPreferences.getInt("video_output_format", -1);
