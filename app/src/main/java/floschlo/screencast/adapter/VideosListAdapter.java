@@ -88,7 +88,7 @@ public class VideosListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             startLoadThumbnail(((VideoCardViewHolder)holder));
         } else if (holder instanceof FooterViewHolder) {
             ((FooterViewHolder) holder).mTextView.setText(
-                    mContext.getResources().getQuantityString(R.plurals.footer_video_count, mVideoDataList.size())
+                    String.format(mContext.getResources().getQuantityString(R.plurals.footer_video_count, mVideoDataList.size()), mVideoDataList.size())
             );
         }
     }
