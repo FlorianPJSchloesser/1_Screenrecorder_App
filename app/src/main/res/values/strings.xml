@@ -24,12 +24,16 @@
     <string name="label_encoder">Encoder</string>
     <string name="label_output_format">Output Format</string>
     <string name="label_fps">FPS</string>
+    <string name="label_microphone">Audio Recording</string>
 
     <string name="title_dialog_share">Share with</string>
 
     <string name="title_toolbar_video_configuration">Video Configuration</string>
 
     <string name="hint_must_enable_external_storage_access">You must enable external storage access in order to display recorded videos.\nHowever, your screencasts will also appear in your gallery app.</string>
+    <string name="hint_audio_recording_on">Your microphone will be used to record audio.</string>
+    <string name="hint_audio_recording_off">The record will contain no audio.</string>
+    <string name="hint_audio_recording">Enables audio for recording.</string>
 
     <string name="snackbar_recording_finished">Recording finished</string>
     <string name="snackbar_cannot_initiate_video">Cannot initiate video!</string>
