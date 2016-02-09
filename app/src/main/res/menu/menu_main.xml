@@ -10,11 +10,4 @@
         android:visible="true"
         android:orderInCategory="1"
         android:icon="@drawable/ic_action_video_configuration"/>
-
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        app:showAsAction="never"
-        android:visible="true"
-        android:orderInCategory="100"/>
 </menu>

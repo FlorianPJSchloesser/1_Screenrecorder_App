@@ -228,9 +228,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                openSetting();
-                return true;
             case R.id.action_video_configuration:
                 //openVideoConfiguration();
 
@@ -572,12 +569,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public static final int MPEG_4 = 2; */
         String[] outputArray = new String[]{".mp4", ".3gp", ".mp4"};
         return outputArray[outputFormat];
-    }
-
-
-    private void openSetting() {
-        Intent openSettingsIntent = new Intent(this, SettingsActivity.class);
-        startActivity(openSettingsIntent);
     }
 
     private void addVideoToMediaStore(File file) {

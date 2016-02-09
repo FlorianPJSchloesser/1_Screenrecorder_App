@@ -39,11 +39,6 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
         <activity android:name=".activity.VideoDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
