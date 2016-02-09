@@ -47,9 +47,12 @@ public class VideosListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private ArrayList<VideoDataContainer> mVideoDataList;
 
+    private int mIdCount;
+
     public VideosListAdapter(Context context) {
         mContext = context;
         mTasksList = new HashMap<>();
+        mIdCount = 1;
     }
 
     public void setData (ArrayList<VideoDataContainer> data) {
@@ -66,6 +69,8 @@ public class VideosListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (viewType) {
             case TYPE_CARD:
                 VideoCardViewHolder videoViewHolder = new VideoCardViewHolder(lLayoutInflater.inflate(R.layout.layout_videocard, parent, false));
+                videoViewHolder.mId = mIdCount;
+                mIdCount++;
                 return videoViewHolder;
             case TYPE_FOOTER:
                 FooterViewHolder footerViewHolder = new FooterViewHolder(lLayoutInflater.inflate(R.layout.layout_footer, parent, false));
@@ -83,7 +88,7 @@ public class VideosListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             startLoadThumbnail(((VideoCardViewHolder)holder));
         } else if (holder instanceof FooterViewHolder) {
             ((FooterViewHolder) holder).mTextView.setText(
-                    String.format(mContext.getString(R.string.footer_video_count), mVideoDataList.size() + "")
+                    mContext.getResources().getQuantityString(R.plurals.footer_video_count, mVideoDataList.size())
             );
         }
     }
@@ -106,18 +111,18 @@ public class VideosListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void startLoadThumbnail (final VideoCardViewHolder holder) {
-        if (mTasksList.containsKey(holder.getOldPosition())) {
-            ((LoadVideoThumbnailTask) mTasksList.get(holder.getOldPosition())).cancel(true);
-            mTasksList.remove(holder.getOldPosition());
+        if (mTasksList.containsKey(holder.mId)) {
+            mTasksList.get(holder.mId).cancel(true);
+            mTasksList.remove(holder.mId);
         }
-        LoadVideoThumbnailTask task = new LoadVideoThumbnailTask(mVideoDataList.get(holder.getAdapterPosition()).getVideoPath(), new LoadVideoThumbnailTask.OnVideoThumbnailLoadListener() {
+        LoadVideoThumbnailTask task = new LoadVideoThumbnailTask(mVideoDataList.get(holder.mId).getVideoPath(), new LoadVideoThumbnailTask.OnVideoThumbnailLoadListener() {
             @Override
             public void onThumbnailLoad(Bitmap thumbnail) {
                 holder.setThumbnail(thumbnail);
-                mTasksList.remove(holder.getAdapterPosition());
+                mTasksList.remove(holder.mId);
             }
         });
-        mTasksList.put(holder.getAdapterPosition(), task);
+        mTasksList.put(holder.mId, task);
         task.execute();
     }
 
