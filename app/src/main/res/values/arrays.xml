@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- The strings are seperatly for translation -->
+    <string name="one_second">1 second</string>
+    <string name="two_seconds">2 seconds</string>
+    <string name="three_seconds">3 seconds</string>
+    <string name="five_seconds">5 seconds</string>
+    <string name="ten_seconds">10 seconds</string>
+    <string name="fifteen_seconds">15 seconds</string>
+    <string name="default_element">Default</string>
+    <string name="default_mp4">Default (MP4)</string>
+
     <integer-array name="prefs_recording_start_delay">
         <item>1</item>
         <item>2</item>
@@ -11,12 +21,12 @@
     </integer-array>
 
     <string-array name="prefs_entries_recording_start_delay">
-        <item>1 Second</item>
-        <item>2 Seconds</item>
-        <item>3 Seconds</item>
-        <item>5 Seconds</item>
-        <item>10 Seconds</item>
-        <item>15 Seconds</item>
+        <item>@string/one_second</item>
+        <item>@string/two_seconds</item>
+        <item>@string/three_seconds</item>
+        <item>@string/five_seconds</item>
+        <item>@string/ten_seconds</item>
+        <item>@string/fifteen_seconds</item>
     </string-array>
 
     <integer-array name="prefs_video_bitrate">
@@ -46,7 +56,7 @@
     </integer-array>
 
     <string-array name="prefs_entries_video_encoder">
-        <item>Default</item>
+        <item>@string/default_element</item>
         <item>H263</item>
         <item>H264</item>
         <item>MPEG 4 SP</item>
@@ -54,7 +64,7 @@
     </string-array>
 
     <string-array name="prefs_entries_output_format">
-        <item>Default (MP4)</item>
+        <item>@string/default_mp4</item>
         <item>MP4</item>
         <item>3GPP</item>
     </string-array>
