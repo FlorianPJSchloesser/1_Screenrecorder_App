@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Strings are separated because of translation -->
+
+    <string name="zero_videos">No records</string>
+    <string name="one_video">One record</string>
+    <string name="two_videos">Two records</string>
+    <string name="other_videos">%s records</string>
+
     <plurals name="footer_video_count">
-        <item quantity="zero">No videos</item>
-        <item quantity="one">One video total</item>
-        <item quantity="two">Two videos total</item>
-        <item quantity="other">%s videos total</item>
+        <item quantity="zero">@string/zero_videos</item>
+        <item quantity="one">@string/one_video</item>
+        <item quantity="two">@string/two_videos</item>
+        <item quantity="other">@string/other_videos</item>
     </plurals>
 </resources>

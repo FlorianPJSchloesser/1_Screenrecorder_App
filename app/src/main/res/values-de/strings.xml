@@ -41,4 +41,8 @@
     <string name="ten_seconds">10 Sekunden</string>
     <string name="three_seconds">Drei Sekunden</string>
     <string name="two_seconds">Zwei Sekunden</string>
+    <string name="one_video">Eine Aufnahme</string>
+    <string name="other_videos">%s Aufnahmen</string>
+    <string name="two_videos">Zwei Aufnahmen</string>
+    <string name="zero_videos">Keine Aufnahmen</string>
 </resources>
